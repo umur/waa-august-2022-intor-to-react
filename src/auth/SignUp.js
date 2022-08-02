@@ -2,14 +2,14 @@ import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
 
 function SignUp() {
-    const [firstname, setFirstname] = useState('');
-    const [lastname, setLastname] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [body, setBody] = useState({password: '', firstname: '', lastname: '', email: ''})
     const navigate = useNavigate();
 
+    function onChange(event) {
+        setBody({...body, [event.target.name]: event.target.value});
+    }
+
     function onSignUp() {
-        const body = {password, firstname, lastname, email};
         console.log(body);
         // fetch to server
         navigate('/sign-in');
@@ -18,21 +18,21 @@ function SignUp() {
 
     return (
         <>
-            <div class={"form-item"}>
+            <div className={"form-item"}>
                 <label>Firstname</label>
-                <input placeholder={'Firstname'} onChange={event => setFirstname(event.target.value)}/>
+                <input placeholder={'Firstname'} value={body.firstname} name={'firstname'} onChange={onChange}/>
             </div>
             <div className={"form-item"}>
                 <label>Lastname</label>
-                <input placeholder={'Lastname'} onChange={event => setLastname(event.target.value)}/>
+                <input placeholder={'Lastname'} value={body.lastname} name={'lastname'} onChange={onChange}/>
             </div>
             <div className={"form-item"}>
                 <label>Email</label>
-                <input placeholder={'Email'} onChange={event => setEmail(event.target.value)}/>
+                <input placeholder={'Email'} value={body.email} name={'email'} onChange={onChange}/>
             </div>
             <div className={"form-item"}>
                 <label>Password</label>
-                <input placeholder={'Password'} onChange={event => setPassword(event.target.value)}/>
+                <input placeholder={'Password'} value={body.password} name={'password'} onChange={onChange}/>
             </div>
             <button onClick={() => onSignUp()}>Sign Up</button>
         </>

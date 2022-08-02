@@ -13,10 +13,10 @@ function ProductRow ({index, name, price, updateItem, deleteItem}) {
     return (
         <tr>
             <td>{name}</td>
-            <td role={'currency'}>{price}</td>
+            <td className={'currency'}>{price}</td>
             <td>
                 <button onClick={() => onUpdate()}>Update</button>
-                <button role={'delete'} onClick={() => onDelete()}>Delete</button>
+                <button className={'delete'} onClick={() => onDelete()}>Delete</button>
             </td>
         </tr>
     )

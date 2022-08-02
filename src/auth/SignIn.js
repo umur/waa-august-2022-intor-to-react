@@ -2,12 +2,14 @@ import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
 
 function SignIn() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [body, setBody] = useState({password: '', username: ''})
     const navigate = useNavigate();
 
+    function onChange(event) {
+        setBody({...body, [event.target.name]: event.target.value});
+    }
+
     function onSignIn() {
-        const body = {username, password};
         console.log(body);
         // fetch to server
         navigate('/p');
@@ -17,11 +19,11 @@ function SignIn() {
         <>
             <div className={"form-item"}>
                 <label>Username</label>
-                <input placeholder={'Username'} onChange={event => setUsername(event.target.value)}/>
+                <input placeholder={'Username'} value={body.username} name={'username'} onChange={onChange}/>
             </div>
             <div className={"form-item"}>
                 <label>Password</label>
-                <input placeholder={'Password'} onChange={event => setPassword(event.target.value)}/>
+                <input placeholder={'Password'} value={body.password} name={'password'} onChange={onChange}/>
             </div>
             <button onClick={() => onSignIn()}>Sign In</button>
         </>
