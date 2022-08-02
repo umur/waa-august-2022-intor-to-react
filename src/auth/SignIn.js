@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../App";
 
 function SignIn() {
     const [body, setBody] = useState({password: '', username: ''})
     const navigate = useNavigate();
+    const auth = useAuth();
 
     function onChange(event) {
         setBody({...body, [event.target.name]: event.target.value});
@@ -12,7 +14,10 @@ function SignIn() {
     function onSignIn() {
         console.log(body);
         // fetch to server
-        navigate('/p');
+        auth.signIn(body, function () {
+            localStorage.setItem('access_token', 'token');
+            navigate('/p');
+        });
     }
 
     return (
