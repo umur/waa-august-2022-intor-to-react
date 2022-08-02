@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { signIn } from "../../services/uaa";
-import { clearAuthTokens, setAuthTokens } from "../../utils/localStorageUtils";
+import { setAuthTokens } from "../../utils/localStorageUtils";
 import { isUserAuthenticated } from "../../utils/authUtils";
 import { useNavigate } from "react-router-dom";
 
 export default function (props) {
     const [authMode, setAuthMode] = useState("signin");
+    const [formDetails, setFormDetails] = useState({ email: null, password: null });
+
     const [signingIn, setSigningIn] = useState(false);
     const [signingInError, setSignInError] = useState(false);
-    
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,18 +23,39 @@ export default function (props) {
     }
 
     const login = async () => {
-        setSigningIn(true);
-        const [error, response] = await signIn({ email: 'sud@gmail.com', password: 'abcdfss@123' });
-        setSigningIn(false);
-        if (response && !error) {
-            const { accessToken, refreshToken } = response;
-            setAuthTokens({ accessToken, refreshToken });
-        } else {
-            setSignInError(true);
+        const { email, password } = formDetails;
+        if (email && password) {
+            setSigningIn(true);
+            const [error, response] = await signIn({ email, password });
+            setSigningIn(false);
+            if (response && !error) {
+                const { accessToken, refreshToken } = response;
+                setAuthTokens({ accessToken, refreshToken });
+            } else {
+                setSignInError(true);
+            }
         }
     }
-    
-    if(signingIn){
+
+    const updateFormState = (event) => {
+        const txtType = event && event.target.type;
+        const txtValue = event && event.target.value;
+        const newState = formDetails;
+        if (txtType === 'email') {
+            setFormDetails({
+                ...newState,
+                email: txtValue
+            })
+        }
+        if (txtType === 'password') {
+            setFormDetails({
+                ...newState,
+                password: txtValue
+            })
+        }
+    }
+
+    if (signingIn) {
         return (
             <div>
                 Loading.................
@@ -58,6 +81,7 @@ export default function (props) {
                                 type="email"
                                 className="form-control mt-1"
                                 placeholder="Enter email"
+                                onChange={updateFormState}
                             />
                         </div>
                         <div className="form-group mt-3">
@@ -66,6 +90,7 @@ export default function (props) {
                                 type="password"
                                 className="form-control mt-1"
                                 placeholder="Enter password"
+                                onChange={updateFormState}
                             />
                         </div>
                         <div className="d-grid gap-2 mt-3">
