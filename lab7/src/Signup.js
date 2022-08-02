@@ -1,6 +1,8 @@
 function Signup(){
     return (
         <div>
+            Sign Up Form
+            <br/>
             firstname:
             <input type="text"></input>
             <br/>
@@ -12,6 +14,8 @@ function Signup(){
             <br/>
             password:
             <input type="password"></input>
+            <br/>
+            <input type="button" value="Signup"></input>
         </div>
     )
 }
