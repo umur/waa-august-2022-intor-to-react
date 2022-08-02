@@ -22,7 +22,7 @@ export default function SignUp() {
         <div style={{
             display: 'block', width: 550, padding: 30
         }}>
-            <h5>Login Page</h5>
+            <h5>SignUp Page</h5>
             <Form onSubmit={submitForm}>
                 <FormGroup>
                     <Label for="firstnameField">Firstname:</Label>
