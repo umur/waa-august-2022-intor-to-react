@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../App";
+import axios from 'axios';
 
 function SignIn() {
     const [body, setBody] = useState({password: '', username: ''})
@@ -11,12 +12,13 @@ function SignIn() {
         setBody({...body, [event.target.name]: event.target.value});
     }
 
-    function onSignIn() {
+    const onSignIn = async () =>{
         console.log(body);
         // fetch to server
-        auth.signIn(body, function () {
-            localStorage.setItem('access_token', 'token');
-            navigate('/p');
+        const response = await axios.post('/api/uaa/signin', body);
+        auth.signIn({username: body.username}, () => {
+            localStorage.setItem('access_token', response.data.access_token);
+            navigate('/p/product');
         });
     }
 

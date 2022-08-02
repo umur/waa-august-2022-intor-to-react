@@ -1,13 +1,21 @@
 import React, {useState} from 'react';
 import ProductRow from "./ProductRow";
+import axios from "axios";
 
 function Product() {
     const [items, setItems] = useState([]);
 
     const getItems = () => {
-        // const response = await fetch('url');
-        // setItems(response);
-        setItems([{name: 'iPad', price: 1200}, {name: 'iPhone', price: 999}, {name: 'Macbook Pro', price: 2200}])
+        // setItems([{name: 'iPad', price: 1200}, {name: 'iPhone', price: 999}, {name: 'Macbook Pro', price: 2200}])
+        axios.get('api/products', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+            }
+        }).then(res => {
+            setItems(res.data);
+        }).catch(err => {
+        });
     }
 
     // change item value by property with corresponding index

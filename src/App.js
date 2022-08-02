@@ -39,26 +39,19 @@ function App() {
 
 function AuthProvider({children}) {
     let [user, setUser] = useState(null);
-
+    let [token, setToken] = useState(localStorage.getItem('access_token'));
     let signIn = (newUser, callback) => {
-        // return fakeAuthProvider.signin(() => {
-        //   setUser(newUser);
-        //   callback();
-        // });
         setUser(newUser);
-        callback();
+        return callback();
     };
 
     let signOut = (callback) => {
-        // return fakeAuthProvider.signout(() => {
-        //   setUser(null);
-        //   callback();
-        // });
         setUser(null);
-        callback();
+        localStorage.removeItem('access_token');
+        return callback();
     };
 
-    let value = {user, signIn, signOut};
+    let value = {user, token, signIn, signOut};
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
