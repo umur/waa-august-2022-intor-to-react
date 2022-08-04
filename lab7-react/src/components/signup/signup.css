@@ -1,0 +1,27 @@
+.form {
+    width: 20%;
+    margin: auto;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-row {
+    display: flex;
+}
+
+.form-content {
+    text-align: left;
+    width: 50%;
+}
+
+.form-footer {
+    width: 100%;
+    text-align: center;
+}
+
+button {
+    margin: 0 5px;
+}
