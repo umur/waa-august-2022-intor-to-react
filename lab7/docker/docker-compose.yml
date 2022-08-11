@@ -1,0 +1,48 @@
+version: '3'
+
+volumes:
+  postgres_data_1:
+    driver: local
+  postgres_data_app:
+    driver: local
+
+services:
+  app_db:
+    image: postgres
+    volumes:
+      - postgres_data_app:/var/lib/postgresql/data
+    #    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: lab7
+  keycloak_db:
+    image: postgres
+    volumes:
+      - postgres_data_1:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+  keycloak:
+    image: quay.io/keycloak/keycloak:legacy
+    volumes:
+        - ./keycloak-data:/data
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: keycloak_db
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_SCHEMA: public
+      DB_PASSWORD: password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: Pa55w0rd
+      KEYCLOAK_IMPORT: /data/MyProject-realm.json
+      # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+      #JDBC_PARAMS: "ssl=true"
+    ports:
+      - 18080:8080
+    depends_on:
+      - keycloak_db
