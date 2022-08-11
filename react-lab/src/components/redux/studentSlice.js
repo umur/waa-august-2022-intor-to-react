@@ -10,6 +10,21 @@ export const fetchStudents = createAsyncThunk(
   }
 )
 
+export const fetchStudentsWithDetails = createAsyncThunk(
+  'student/fetchAllWithDetails',
+  async (ids) => {
+    const responses = []
+    await Promise.all(
+      ids.map(async (id) => {
+        const response = await axios.get('http://localhost:9090/api/v1/students/' + id);
+        responses.push(response.data);
+      })
+    )
+    return responses;
+
+  }
+)
+
 export const createStudent = createAsyncThunk(
   'student/create',
   async (data) => {
@@ -20,6 +35,7 @@ export const createStudent = createAsyncThunk(
 
 const initialState = {
   students: [],
+  studentsWithDetails: [],
   loading: false,
   state: '',
   error: ''
@@ -41,6 +57,22 @@ const studentSlice= createSlice({
       state.loading = true;
     },
     [fetchStudents.rejected]: (state, action) => {
+      console.log(action);
+      state.state = "rejected"
+      state.error = action + "sfdsf";
+      state.loading = false
+    },
+
+    [fetchStudentsWithDetails.fulfilled]: (state, action) => {
+      state.studentsWithDetails = action.payload;
+      state.state = "fulfilled"
+      state.loading = false;
+    },
+    [fetchStudentsWithDetails.pending]: (state, action) => {
+      state.state = "pending"
+      state.loading = true;
+    },
+    [fetchStudentsWithDetails.rejected]: (state, action) => {
       console.log(action);
       state.state = "rejected"
       state.error = action + "sfdsf";

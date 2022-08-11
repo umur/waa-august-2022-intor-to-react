@@ -1,7 +1,9 @@
+import {useNavigate} from "react-router-dom";
 
 
 export default function Student(props) {
-  const {name, cgpa} = props.student;
+  const {id, name, cgpa} = props.student;
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -9,6 +11,11 @@ export default function Student(props) {
         Student Name: {name}
         <br/>
         CGPA: {cgpa}
+        <button onClick={() => navigate('/student/new/' + id, {
+          state: {
+            id, name, cgpa
+          }
+        })}>Details</button>
       </div>
       <br/>
     </div>

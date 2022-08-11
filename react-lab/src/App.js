@@ -6,7 +6,41 @@ import PropsCounter from "./components/counter/propsCounter";
 import ReduxCounter from "./components/counter/reduxCounter";
 import Index from "./components/student";
 import NewStudent from "./components/student/newStudent";
-function App() {
+import {createContext, useEffect, useRef, useState} from "react";
+import {StudentDetails} from "./components/student/studentDetails";
+export const LanguageContext = createContext({
+  language: "EN",
+  setLanguage: () => {}
+})
+export function App() {
+  const ref = useRef();
+
+  const setLanguage = (language) => {
+    setLanguageState({...languageState, language: language})
+  }
+  const initialState = {
+    language: 'EN',
+    setLanguage: setLanguage
+
+  }
+
+  let [languageState, setLanguageState] = useState(initialState);
+
+
+
+  useEffect(() => {
+    ref.current.disabled = !(languageState.language === 'ES' || languageState.language === 'EN');
+  },[languageState])
+
+  function handleOnClick(e) {
+    e.preventDefault();
+    if(languageState.language ==='EN') {
+      setLanguage('ES')
+    } else if(languageState.language ==='ES') {
+      setLanguage('EN')
+    }
+  }
+
   return (
     <div className="App">
       <ul>
@@ -21,6 +55,11 @@ function App() {
       <ul>
         <Link to='/student'>Student</Link>
       </ul>
+      <div>
+        Language {languageState.language}
+        <button ref={ref} onClick={handleOnClick}>Change Language</button>
+      </div>
+
 
       <Routes>
         <Route path='/' element={<Home/>} />
@@ -33,6 +72,9 @@ function App() {
         <Route path='/student'>
           <Route element={<Index/> } index/>
           <Route element={<NewStudent/> } path='new'/>
+          <Route element={ <LanguageContext.Provider value={languageState}>
+              <StudentDetails/>
+          </LanguageContext.Provider>} path='new/:id'/>
         </Route>
       </Routes>
     </div>

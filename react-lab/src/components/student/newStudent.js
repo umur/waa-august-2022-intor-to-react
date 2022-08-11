@@ -1,12 +1,26 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {createStudent} from "../redux/studentSlice";
+import {useLocation, useParams} from "react-router-dom";
+import {LanguageContext} from "../../App";
 
 
 export default function NewStudent() {
   const [studentState, setStudentSate] = useState({id: 0, name: '', cgpa: 0});
   const {loading, state, error} =useSelector((s) => s.student);
   const dispatch = useDispatch();
+
+
+
+  const parms = useParams();
+  const location = useLocation();
+  useEffect(() => {
+    if(location.state) {
+      setStudentSate(location.state);
+      console.log(location.state)
+    }
+  }, [location.state])
+
 
   function handleOnChange(event) {
     let {name, value} = event.target;
@@ -23,11 +37,14 @@ export default function NewStudent() {
 
   }
 
+
   useEffect(() => {
     if(!loading && state === 'fulfilled') {
-      setStudentSate({id: 0, name: '', cgpa: 0});
+      //setStudentSate({id: 0, name: '', cgpa: 0});
     }
   }, [loading])
+
+
 
   return (
     <div>
@@ -46,6 +63,8 @@ export default function NewStudent() {
       {
         state === 'rejected' ? <div>{error}</div> : <></>
       }
+
+
 
     </div>
   );

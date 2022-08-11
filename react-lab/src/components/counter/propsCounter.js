@@ -16,6 +16,12 @@ export default function PropsCounter(props) {
   }, [counterState]);
 
 
+  useEffect(() => {
+    setInterval(() => setCounterState(++counterState), 1000)
+    return ()=> {
+      alert("removed");
+    }
+  }, [])
 
   function inc() {
     setCounterState(++counterState);
@@ -32,7 +38,7 @@ export default function PropsCounter(props) {
       <input type="button" onClick={dec} value="-" />
       <div>
         <ColorContext.Provider value={colorState}>
-          <MiddleColorContext color={colorState} />
+          <MiddleColorContext />
         </ColorContext.Provider>
       </div>
     </div>

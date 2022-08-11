@@ -11,7 +11,7 @@ export default function Index() {
         <StudentList/>
 
       </div>
-      <button onClick={() => navigate('new')}>New Student</button>
+      <button onClick={() => navigate('/student/new')}>New Student</button>
 
       <Routes>
         <Route path='new' element={<NewStudent/>}/>
